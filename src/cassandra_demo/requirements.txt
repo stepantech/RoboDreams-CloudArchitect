@@ -1,0 +1,9 @@
+cassandra-driver
+prettytable
+requests
+pyopenssl
+python-dotenv
+cqlsh
+prettytable
+azure-identity
+azure-storage-blob

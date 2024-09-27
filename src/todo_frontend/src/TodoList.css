@@ -1,0 +1,56 @@
+.todo-list-container {
+  margin: 20px;
+}
+
+.todo-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.todo-table th,
+.todo-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.todo-table th {
+  background-color: #f2f2f2;
+}
+
+.todo-table td {
+  vertical-align: middle;
+}
+
+.edit-button,
+.delete-button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #45a049;
+}
+
+.delete-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.ai-recommendation {
+  white-space: pre-wrap; /* Preserve whitespace and handle multiline text */
+  max-width: 300px; /* Adjust the width as needed */
+  word-wrap: break-word; /* Break long words to fit within the cell */
+}

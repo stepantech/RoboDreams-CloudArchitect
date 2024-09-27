@@ -1,0 +1,166 @@
+name: Books demo
+on:
+  push:
+    paths:
+      - 'src/books_functions/**'
+      - 'terraform/books/**'
+  workflow_dispatch: 
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ARM_USE_OIDC: true
+  ARM_USE_AZUREAD: true
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  TF_DIR: terraform/books
+  FUNCTIONAPP_BOOKS_DIR: src/books_functions
+  FUNCTIONAPP_VERSIONME_DIR: src/versionme_functions
+
+jobs:
+  infrastructure:
+    runs-on: ubuntu-latest
+    outputs:
+      TF_DIR: ${{ steps.tf_outputs.outputs.TF_DIR }}
+      function_app_books_name: ${{ steps.tf_outputs.outputs.function_app_books_name }}
+      function_app_books_rg: ${{ steps.tf_outputs.outputs.function_app_books_rg }}
+      function_app_versionme_name: ${{ steps.tf_outputs.outputs.function_app_versionme_name }}
+      function_app_versionme_rg: ${{ steps.tf_outputs.outputs.function_app_versionme_rg }}
+      storage_account_name: ${{ steps.tf_outputs.outputs.storage_account_name }}
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Setup Terraform'
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+         
+      - name: 'Terraform Init'
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform init
+
+      - name: 'Terraform Apply'
+        working-directory: ${{ env.TF_DIR }}
+        run: terraform apply -auto-approve
+
+      - name: 'Terraform Output'
+        working-directory: ${{ env.TF_DIR }}
+        id: tf_outputs
+        run: |
+          echo function_app_books_name=$(terraform output function_app_books_name) >> $GITHUB_OUTPUT
+          echo function_app_books_rg=$(terraform output function_app_books_rg) >> $GITHUB_OUTPUT
+          echo function_app_versionme_name=$(terraform output function_app_versionme_name) >> $GITHUB_OUTPUT
+          echo function_app_versionme_rg=$(terraform output function_app_versionme_rg) >> $GITHUB_OUTPUT
+          echo storage_account_name=$(terraform output storage_account_name) >> $GITHUB_OUTPUT
+
+  books:
+    runs-on: ubuntu-latest
+    needs: infrastructure
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Python 3.11 Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install Python dependencies for Books
+        working-directory: ${{ env.FUNCTIONAPP_BOOKS_DIR }}
+        run: |
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          echo "************"
+          ls -lah .python_packages/lib/site-packages
+          ls -lah .
+
+      - name: Package deployment artifacts for books
+        working-directory: ${{ env.FUNCTIONAPP_BOOKS_DIR }}
+        run: zip -r release.zip .
+
+      - name: Upload deployment artifact to blob storage for books
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            cd ${{ env.FUNCTIONAPP_BOOKS_DIR }}
+            az storage container create --account-name ${{ needs.infrastructure.outputs.storage_account_name }} -n releases
+            az storage blob upload --account-name ${{ needs.infrastructure.outputs.storage_account_name }} \
+              --container-name releases \
+              --file release.zip \
+              --name books$GITHUB_RUN_ID.zip
+
+      - name: Set deployment url on function app for books
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            az functionapp config appsettings set --name ${{ needs.infrastructure.outputs.function_app_books_name }} \
+              --resource-group ${{ needs.infrastructure.outputs.function_app_books_rg }} \
+              --settings WEBSITE_RUN_FROM_PACKAGE=https://${{ needs.infrastructure.outputs.storage_account_name }}.blob.core.windows.net/releases/books$GITHUB_RUN_ID.zip
+
+  versionme:
+    runs-on: ubuntu-latest
+    needs: infrastructure
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Python 3.11 Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Install Python dependencies for Books
+        working-directory: ${{ env.FUNCTIONAPP_VERSIONME_DIR }}
+        run: |
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          echo "************"
+          ls -lah .python_packages/lib/site-packages
+          ls -lah .
+
+      - name: Package deployment artifacts for books
+        working-directory: ${{ env.FUNCTIONAPP_VERSIONME_DIR }}
+        run: zip -r release.zip .
+
+      - name: Upload deployment artifact to blob storage for books
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            cd ${{ env.FUNCTIONAPP_VERSIONME_DIR }}
+            az storage container create --account-name ${{ needs.infrastructure.outputs.storage_account_name }} -n releases
+            az storage blob upload --account-name ${{ needs.infrastructure.outputs.storage_account_name }} \
+              --container-name releases \
+              --file release.zip \
+              --name versionme$GITHUB_RUN_ID.zip
+
+      - name: Set deployment url on function app for books
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            az functionapp config appsettings set --name ${{ needs.infrastructure.outputs.function_app_versionme_name }} \
+              --resource-group ${{ needs.infrastructure.outputs.function_app_versionme_rg }} \
+              --settings WEBSITE_RUN_FROM_PACKAGE=https://${{ needs.infrastructure.outputs.storage_account_name }}.blob.core.windows.net/releases/versionme$GITHUB_RUN_ID.zip

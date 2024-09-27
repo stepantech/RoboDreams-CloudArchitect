@@ -1,0 +1,9 @@
+fastapi
+fastapi-cors
+uvicorn
+pydantic
+python-dotenv
+sqlalchemy
+pyodbc
+psycopg2-binary
+azure-servicebus

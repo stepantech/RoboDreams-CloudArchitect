@@ -1,0 +1,4 @@
+azure-identity
+azure-servicebus
+python-dotenv
+Faker

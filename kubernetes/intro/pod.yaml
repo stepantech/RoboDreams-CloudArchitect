@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+spec:
+  containers:
+  - name: web
+    image: ghcr.io/tkubica12/web:1
+    ports:
+    - containerPort: 3000

@@ -1,0 +1,1 @@
+This deploys simple Green/Blue deployment style with Virtual Machines.

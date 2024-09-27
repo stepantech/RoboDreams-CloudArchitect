@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secret-app-kata
+spec:
+  runtimeClassName: kata-mshv-vm-isolation
+  containers:
+  - name: secret-app
+    image: ghcr.io/tkubica12/cloud-arch-app-data/secret_app:latest
+  nodeSelector:
+    kubernetes.azure.com/agentpool: kata

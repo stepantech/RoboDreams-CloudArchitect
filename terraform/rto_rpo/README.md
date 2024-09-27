@@ -1,0 +1,1 @@
+This deploys Azure Site Recovery for VM replication to demonstrate RTO/RPO tradeoffs.

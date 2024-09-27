@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mypvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pvc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pvc
+  template:
+    metadata:
+      labels:
+        app: pvc
+    spec:
+      containers:
+      - name: web
+        image: nginx
+        volumeMounts:
+        - name: mystorage
+          mountPath: /data
+      volumes:
+      - name: mystorage
+        persistentVolumeClaim:
+          claimName: mypvc

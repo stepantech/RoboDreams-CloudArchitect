@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prom-load-deployment
+  labels:
+    app: prom-load
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prom-load
+  template:
+    metadata:
+      labels:
+        app: prom-load
+    spec:
+      containers:
+      - name: prom-load-container
+        image: ghcr.io/tkubica12/cloud-arch-app-data/monitoring_load:latest
+        env:
+        - name: ENDPOINTS
+          value: "[\"http://prom-demo-service:8000\"]"
+        - name: WAIT_TIME
+          value: "1"

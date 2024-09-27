@@ -1,0 +1,40 @@
+### Get all todos
+GET http://localhost:7071/api/todos
+content-type: application/json
+
+### Create a new todo
+
+# @name createTodo
+POST http://localhost:7071/api/todos
+content-type: application/json
+
+{
+    "label": "Todo 1",
+    "description": "Description 1",
+    "state": "pending",
+    "due_date": "2023-10-12T14:30:00"
+}
+
+### Delete a todo
+@id = {{createTodo.response.body.$.id}}
+
+DELETE http://localhost:7071/api/todos/{{id}}
+content-type: application/json
+
+### Get a todo
+@id = {{createTodo.response.body.$.id}}
+GET http://localhost:7071/api/todos/{{id}}
+content-type: application/json
+
+### Update a todo
+@id = {{createTodo.response.body.$.id}}
+PUT http://localhost:7071/api/todos/{{id}}
+content-type: application/json
+
+{
+    "label": "Todo 1",
+    "description": "Description 1",
+    "state": "done",
+    "due_date": "2023-10-12T14:30:00"
+}
+

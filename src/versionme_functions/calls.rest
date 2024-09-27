@@ -1,0 +1,12 @@
+###
+GET http://localhost:7071/api/versionme1
+content-type: application/json
+
+###
+GET http://localhost:7071/api/versionme1next
+content-type: application/json
+
+###
+GET http://localhost:7071/api/versionme2
+content-type: application/json
+

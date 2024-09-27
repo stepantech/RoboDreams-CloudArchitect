@@ -1,0 +1,29 @@
+name: 06 BUILD sb_producer
+
+on:
+  push:
+    paths:
+      - 'src/sb_producer/**'
+  workflow_dispatch: 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Login to GitHub Packages Docker registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: src/sb_producer
+        push: true
+        tags: ghcr.io/${{ github.repository }}/sb_producer:latest

@@ -1,0 +1,51 @@
+POST http://localhost:7071/api/books
+content-type: application/json
+
+{
+    "title": "Book 1",
+    "author": "Author 1"
+}
+
+###
+
+GET http://localhost:7071/api/books
+content-type: application/json
+
+###
+
+GET http://localhost:7071/api/books?author=Author%201
+content-type: application/json
+
+###
+
+GET http://localhost:7071/api/books/3d4aa4fb-63c9-4afd-8488-a61661c1e921
+content-type: application/json
+
+###
+
+DELETE http://localhost:7071/api/books/cdfe6f52-f5c9-4fbb-8907-9fe9bc7d8bab
+content-type: application/json
+
+###
+
+PUT http://localhost:7071/api/books/3d4aa4fb-63c9-4afd-8488-a61661c1e921
+content-type: application/json
+
+{
+    "author": "Author UPDATED"
+}
+
+###
+
+POST https://func-books-rd-zwqx.azurewebsites.net/api/createBook?code=fjxGNw0RMRF4njNKgzJduxFntoCAooRb24g7GwlQJ302AzFuoMsdNg%3D%3D
+content-type: application/json
+
+{
+    "title": "Book 1",
+    "author": "Author 1"
+}
+
+###
+
+GET http://localhost:7071/api/getBook/0766f607-f5ca-4d36-9d10-37f70c7d52e85
+content-type: application/json

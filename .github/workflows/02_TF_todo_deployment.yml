@@ -1,0 +1,154 @@
+name: 02 TF - todo
+
+on:
+  workflow_dispatch: 
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ARM_USE_OIDC: true
+  ARM_USE_AZUREAD: true
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  TF_DIR: terraform/todo
+  APP_DIR: src/todo_frontend
+  API_DIR: src/todo_functions
+
+
+jobs:
+  infrastructure:
+    runs-on: ubuntu-latest
+    name: Deploy infrastructure
+    outputs:
+      static_webapp_url: ${{ steps.tf_outputs.outputs.static_webapp_url }}
+      static_webapp_name: ${{ steps.tf_outputs.outputs.static_webapp_name }}
+      function_app_name: ${{ steps.tf_outputs.outputs.function_app_name }}
+      function_app_rg: ${{ steps.tf_outputs.outputs.function_app_rg }}
+      storage_account_name: ${{ steps.tf_outputs.outputs.storage_account_name }}
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Setup Terraform'
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+         
+      - name: 'Terraform Init'
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform init
+
+      - name: 'Terraform Apply'
+        working-directory: ${{ env.TF_DIR }}
+        run: |
+          terraform apply -auto-approve -var "AZURE_OPENAI_API_KEY=${{ secrets.AZURE_OPENAI_API_KEY }}" -var "AZURE_OPENAI_ENDPOINT=${{ secrets.AZURE_OPENAI_ENDPOINT }}"
+
+      - name: 'Terraform Output'
+        working-directory: ${{ env.TF_DIR }}
+        id: tf_outputs
+        run: |
+          echo static_webapp_name=$(terraform output static_webapp_name) >> $GITHUB_OUTPUT
+          echo static_webapp_url=$(terraform output static_webapp_url) >> $GITHUB_OUTPUT
+          echo function_app_name=$(terraform output function_app_name) >> $GITHUB_OUTPUT
+          echo function_app_rg=$(terraform output function_app_rg) >> $GITHUB_OUTPUT
+          echo storage_account_name=$(terraform output storage_account_name) >> $GITHUB_OUTPUT
+
+  static_webapp:
+    runs-on: ubuntu-latest
+    needs: infrastructure
+    name: Deploy Static WebApp
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+
+      - name: Install SWA CLI
+        run: npm install -g @azure/static-web-apps-cli
+
+      - name: Build app configuration
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          echo "window._env_ = { apiUrl: '${{ needs.infrastructure.outputs.static_webapp_url }}' };" > ./public/config.js
+
+      - run: cat ${{ env.APP_DIR }}/public/config.js
+
+      - name: Build React app
+        working-directory: ${{ env.APP_DIR }}
+        run: npm install && npm run build
+
+        
+      - name: Deploy React app
+        run: swa deploy --app-location ./build -n ${{ needs.infrastructure.outputs.static_webapp_name }} --env production
+        working-directory: ${{ env.APP_DIR }}
+
+
+  function_app:
+    runs-on: ubuntu-latest
+    needs: infrastructure
+    name: Deploy Function App
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Az CLI login'
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Python 3.11 Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+  
+      - name: Install Python dependencies for Books
+        working-directory: ${{ env.API_DIR }}
+        run: |
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          echo "************"
+          ls -lah .python_packages/lib/site-packages
+          ls -lah .
+
+      - name: Package deployment artifacts for todos
+        working-directory: ${{ env.API_DIR }}
+        run: zip -r release.zip .
+  
+      - name: Upload deployment artifact to blob storage for todos
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            cd ${{ env.API_DIR }}
+            az storage container create --account-name ${{ needs.infrastructure.outputs.storage_account_name }} -n releases
+            az storage blob upload --account-name ${{ needs.infrastructure.outputs.storage_account_name }} \
+              --container-name releases \
+              --file release.zip \
+              --name todo$GITHUB_RUN_ID.zip
+  
+      - name: Set deployment url on function app for todos
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            az functionapp config appsettings set --name ${{ needs.infrastructure.outputs.function_app_name }} \
+              --resource-group ${{ needs.infrastructure.outputs.function_app_rg }} \
+              --settings WEBSITE_RUN_FROM_PACKAGE=https://${{ needs.infrastructure.outputs.storage_account_name }}.blob.core.windows.net/releases/todo$GITHUB_RUN_ID.zip

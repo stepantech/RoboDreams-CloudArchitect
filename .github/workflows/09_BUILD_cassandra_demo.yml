@@ -1,0 +1,29 @@
+name: 09 BUILD - cassandra_demo
+
+on:
+  push:
+    paths:
+      - 'src/cassandra_demo/**'
+  workflow_dispatch: 
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Login to GitHub Packages Docker registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: src/cassandra_demo
+        push: true
+        tags: ghcr.io/${{ github.repository }}/cassandra_demo:latest

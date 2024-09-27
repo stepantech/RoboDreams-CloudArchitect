@@ -1,0 +1,11 @@
+namespace: preprod
+
+resources:
+  - ../base
+
+images:
+  - name: hcr.io/tkubica12/web
+  - newTag: "2"
+
+patches:
+  - path: deployment-patch.yaml

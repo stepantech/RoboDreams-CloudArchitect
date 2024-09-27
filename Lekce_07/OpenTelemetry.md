@@ -1,0 +1,2 @@
+# OpenTelemetry demo
+In our cluster there is official OpenTelemetry demo deployed. Follow guide [here](https://opentelemetry.io/docs/demo/kubernetes-deployment/#use-the-demo) and focus on Jaeger part, but in spans we also see logs (events) and metrics which can also be used to build Grafana dashboard, that is also part of the demo.

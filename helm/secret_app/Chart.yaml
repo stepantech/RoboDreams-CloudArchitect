@@ -1,0 +1,4 @@
+name: secret_app
+description: A Helm chart for the secret app used for testing Kata containers and Confidential Containers
+version: 0.1.0
+apiVersion: v2

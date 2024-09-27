@@ -1,0 +1,81 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-demo
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      canaryService: rollouts-demo-canary
+      stableService: rollouts-demo-stable
+      trafficRouting:
+        nginx:
+          stableIngress: rollouts-demo-stable
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: rollouts-demo
+  template:
+    metadata:
+      labels:
+        app: rollouts-demo
+    spec:
+      containers:
+      - name: rollouts-demo
+        image: argoproj/rollouts-demo:blue
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            memory: 32Mi
+            cpu: 5m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-demo-stable
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: rollouts-demo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-demo-canary
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: rollouts-demo
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rollouts-demo-stable
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com 
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rollouts-demo-stable
+            port:
+              number: 80

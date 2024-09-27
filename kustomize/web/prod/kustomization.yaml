@@ -1,0 +1,11 @@
+namespace: prod
+
+resources:
+  - ../base
+
+images:
+  - name: ghcr.io/tkubica12/web
+  - newTag: "1"
+
+patches:
+  - path: deployment-patch.yaml
