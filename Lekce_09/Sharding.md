@@ -1,4 +1,4 @@
 # Sharding
-In this example we have deployed single engine PostgreSQL using Azure Database for PostgreSQL and also sharded option using Citus technology via managed Azure CosmosDB for PostgreSQL.
+V tomto příkladu jsme nasadili jednojádrový PostgreSQL pomocí Azure Database for PostgreSQL a také shardovanou možnost pomocí technologie Citus prostřednictvím spravovaného Azure CosmosDB pro PostgreSQL.
 
-Go to UI and look at both options and in sharded option follow Quick start guide in portal.
+Přejděte do uživatelského rozhraní a podívejte se na obě možnosti. U shardované možnosti postupujte podle průvodce Quick start v portálu.

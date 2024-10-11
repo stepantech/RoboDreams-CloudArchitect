@@ -35,3 +35,13 @@ resource "azurerm_storage_blob" "csv" {
   type                   = "Block"
   source                 = "files/mydata.csv"
 }
+
+
+resource "azurerm_storage_blob" "lending_club" {
+  name                   = "example/lending_club.csv"
+  storage_account_name   = azurerm_storage_account.main.name
+  storage_container_name = azurerm_storage_container.bronze.name
+  type                   = "Block"
+  source                 = "files/lending_club.csv"
+}
+

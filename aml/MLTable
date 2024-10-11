@@ -1,0 +1,7 @@
+paths:
+  - file: ./lending_club.csv
+transformations:
+  - read_delimited:
+      delimiter: ","
+      encoding: "utf-8"
+      support_multi_line: true

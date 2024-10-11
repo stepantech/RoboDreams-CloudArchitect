@@ -31,11 +31,29 @@ resource "databricks_catalog" "main" {
   ]
 }
 
+resource "databricks_grants" "catalog" {
+  catalog = databricks_catalog.main.id
+
+  grant {
+    principal  = "account users"
+    privileges = ["USE CATALOG"]
+  }
+}
+
 // Schema (database)
 resource "databricks_schema" "main" {
   catalog_name  = databricks_catalog.main.id
   name          = "mydb"
   force_destroy = true
+}
+
+resource "databricks_grants" "schema" {
+  schema = databricks_schema.main.id
+
+  grant {
+    principal  = "account users"
+    privileges = ["CREATE TABLE", "USE SCHEMA"]
+  }
 }
 
 // Storage access - connector
@@ -77,7 +95,16 @@ resource "databricks_grants" "external_creds" {
 
   grant {
     principal  = "account users"
-    privileges = ["READ_FILES"]
+    privileges = ["READ_FILES", "WRITE_FILES"]
+  }
+}
+
+resource "databricks_grants" "external_location" {
+  external_location = databricks_external_location.bronze.id
+
+  grant {
+    principal  = "account users"
+    privileges = ["READ_FILES", "WRITE_FILES", "CREATE EXTERNAL TABLE"]
   }
 }
 

@@ -27,24 +27,27 @@ fake.add_provider(isbn)
 fake.add_provider(profile)
 fake.add_provider(phone_number)
 
-# Store messages as JSON files in the Azure Blob Storage container
-for i in range(COUNT):
-    # Generate a fake profile with specific fields
-    record = fake.profile(fields={"username", "mail"})
+def generate_book_record(i) -> str:
+    record = {}
     record["isbn"] = fake.isbn13()
     record["title"] = fake.sentence(nb_words=6, variable_nb_words=True)
-    record["author"] = fake.name()
+    record["author_id"] = i
     record["count"] = fake.random_int(min=1, max=10)
     record["time_generated"] = time.strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Convert the message to JSON
-    record_json = json.dumps(record)
-    
-    # Create a unique blob name
-    blob_name = f"myjsons/{uuid.uuid4()}.json"
+    return json.dumps(record)
+
+def generate_author_record(i) -> str:
+    record = {}
+    record = fake.profile(fields={"name", "username", "mail", "residence", "sex", "address"})
+    record["author_id"] = i
+    return json.dumps(record)
+
+def upload_blob(folder, data):
+    blob_name = f"{folder}/{uuid.uuid4()}.json"
     blob_client = container_client.get_blob_client(blob_name)
-    
-    # Upload the JSON data as a blob
-    blob_client.upload_blob(record_json)
+    blob_client.upload_blob(data)
     print(f"Uploaded blob: {blob_name}")
 
+for i in range(COUNT):
+    upload_blob("books", generate_book_record(i))
+    upload_blob("authors", generate_author_record(i))

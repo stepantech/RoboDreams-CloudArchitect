@@ -1,16 +1,16 @@
 # Cassandra
-In this demo we have deployed managed Cassandra in Azure in 3 different regions with 3 instances in each region. Let's see in portal.
+V této ukázce jsme nasadili spravovanou Cassandru v Azure ve 3 různých regionech, přičemž v každém regionu jsou 3 instance. Podívejme se na to v portálu.
 
-In Container Apps there is container running with few testing Python scripts. Go into console of this container.
+V Container Apps běží kontejner s několika testovacími Python skripty. Přejděte do konzole tohoto kontejneru.
 
-First run `python setup.py` which will create keyspace and few tables with different replication factors. See code with CQL commands and discuss various settings.
+Nejprve spusťte `python setup.py`, který vytvoří keyspace a několik tabulek s různými replikacemi. Podívejte se na kód s CQL příkazy a diskutujte o různých nastaveních.
 
-Next we will test performance in extreme scenario using 3 replicas in 3 regions strategy from very weak consistency (ONE) all the way to very strong (ALL) and measure write and read speed.
+Dále otestujeme výkon v extrémním scénáři pomocí strategie 3 replik ve 3 regionech, od velmi slabé konzistence (ONE) až po velmi silnou (ALL), a změříme rychlost zápisu a čtení.
 
-Let's run write test using various consistency levels and get table with results by running `python write_speed.py`.
+Spusťme test zápisu pomocí různých úrovní konzistence a získejme tabulku s výsledky spuštěním `python write_speed.py`.
 
-Now let's run read test using various consistency levels and get table with results by running `python read_speed.py`.
+Nyní spusťme test čtení pomocí různých úrovní konzistence a získejme tabulku s výsledky spuštěním `python read_speed.py`.
 
-Resulting files can be uploaded to Azure Storage Account using `python upload.py`.
+Výsledné soubory lze nahrát do Azure Storage Account pomocí `python upload.py`.
 
-We will do this live, but you can see my previous results in cassandra_results folder.
+Toto provedeme živě, ale můžete vidět mé předchozí výsledky ve složce cassandra_results.

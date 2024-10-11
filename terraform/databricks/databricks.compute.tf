@@ -80,59 +80,59 @@ resource "databricks_cluster" "single_large" {
   ]
 }
 
-resource "databricks_cluster" "multi3" {
-  cluster_name            = "MultiNodeCluster3"
-  spark_version           = data.databricks_spark_version.latest_lts.id
-  node_type_id            = data.databricks_node_type.small.id
-  autotermination_minutes = 15
-  data_security_mode      = "USER_ISOLATION"
-  num_workers             = 3
-  runtime_engine          = "PHOTON"
+# resource "databricks_cluster" "multi3" {
+#   cluster_name            = "MultiNodeCluster3"
+#   spark_version           = data.databricks_spark_version.latest_lts.id
+#   node_type_id            = data.databricks_node_type.small.id
+#   autotermination_minutes = 15
+#   data_security_mode      = "USER_ISOLATION"
+#   num_workers             = 3
+#   runtime_engine          = "PHOTON"
 
-  spark_conf = {
-    "spark.databricks.io.cache.enabled" : "true"
-  }
+#   spark_conf = {
+#     "spark.databricks.io.cache.enabled" : "true"
+#   }
 
-  depends_on = [
-    azurerm_databricks_workspace.main
-  ]
-}
+#   depends_on = [
+#     azurerm_databricks_workspace.main
+#   ]
+# }
 
-resource "databricks_cluster" "multi4" {
-  cluster_name            = "MultiNodeCluster4"
-  spark_version           = data.databricks_spark_version.latest_lts.id
-  node_type_id            = data.databricks_node_type.small.id
-  autotermination_minutes = 15
-  data_security_mode      = "USER_ISOLATION"
-  num_workers             = 4
-  runtime_engine          = "PHOTON"
+# resource "databricks_cluster" "multi4" {
+#   cluster_name            = "MultiNodeCluster4"
+#   spark_version           = data.databricks_spark_version.latest_lts.id
+#   node_type_id            = data.databricks_node_type.small.id
+#   autotermination_minutes = 15
+#   data_security_mode      = "USER_ISOLATION"
+#   num_workers             = 4
+#   runtime_engine          = "PHOTON"
 
-  spark_conf = {
-    "spark.databricks.io.cache.enabled" : "true"
-  }
+#   spark_conf = {
+#     "spark.databricks.io.cache.enabled" : "true"
+#   }
 
-  depends_on = [
-    azurerm_databricks_workspace.main
-  ]
-}
+#   depends_on = [
+#     azurerm_databricks_workspace.main
+#   ]
+# }
 
-resource "databricks_cluster" "multi8" {
-  cluster_name            = "MultiNodeCluster8"
-  spark_version           = data.databricks_spark_version.latest_lts.id
-  node_type_id            = data.databricks_node_type.small.id
-  autotermination_minutes = 15
-  data_security_mode      = "USER_ISOLATION"
-  num_workers             = 8
-  runtime_engine          = "PHOTON"
+# resource "databricks_cluster" "multi8" {
+#   cluster_name            = "MultiNodeCluster8"
+#   spark_version           = data.databricks_spark_version.latest_lts.id
+#   node_type_id            = data.databricks_node_type.small.id
+#   autotermination_minutes = 15
+#   data_security_mode      = "USER_ISOLATION"
+#   num_workers             = 8
+#   runtime_engine          = "PHOTON"
 
-  spark_conf = {
-    "spark.databricks.io.cache.enabled" : "true"
-  }
+#   spark_conf = {
+#     "spark.databricks.io.cache.enabled" : "true"
+#   }
 
-  depends_on = [
-    azurerm_databricks_workspace.main
-  ]
-}
+#   depends_on = [
+#     azurerm_databricks_workspace.main
+#   ]
+# }
 
 
 

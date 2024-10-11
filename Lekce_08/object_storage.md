@@ -1,5 +1,5 @@
-# Object Storage demonstration
-- Upload file to storage to see it is behaving like "big web server"
-- Redundancy options, tiering options
-- Massive scalability discussion
-- RBAC model
+# Demonstrace objektového úložiště
+- Nahrajte soubor do úložiště, abyste viděli, že se chová jako "velký webový server"
+- Možnosti redundance, možnosti vrstvení
+- Diskuse o masivní škálovatelnosti
+- Model RBAC (Role-Based Access Control)

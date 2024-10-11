@@ -28,28 +28,6 @@ EOF
   }
 
   response {
-    status_code = 200
-    description = "The book was successfully updated."
-
-    representation {
-      content_type = "application/json"
-
-      example {
-        name  = "book"
-        value = <<EOF
-{
-  "message": "Book updated successfully",
-  "id": "123e4567-e89b-12d3-a456-426614174000",
-  "updatedFields": {
-    "title": "Chenged Book Title",
-  }
-}
-EOF
-      }
-    }
-  }
-
-  response {
     status_code = 204
     description = "The book was successfully deleted."
   }
