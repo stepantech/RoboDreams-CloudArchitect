@@ -1,5 +1,7 @@
 # Architektura aplikací a zpracování dat v cloudu
 - [Architektura aplikací a zpracování dat v cloudu](#architektura-aplikací-a-zpracování-dat-v-cloudu)
+- [Základní informace o kurzu](#základní-informace-o-kurzu)
+- [Hodnocení, úkoly, závěrečná práce a termíny](#hodnocení-úkoly-závěrečná-práce-a-termíny)
 - [Modul 1: Základní koncepty](#modul-1-základní-koncepty)
   - [1. lekce: Základní koncepty návrhu cloudových řešení](#1-lekce-základní-koncepty-návrhu-cloudových-řešení)
 - [Modul 2: Compute](#modul-2-compute)
@@ -22,6 +24,50 @@
   - [13. lekce: CI/CD a DevSecOps](#13-lekce-cicd-a-devsecops)
 - [Modul 8: Představení vybraných závěrečných prací](#modul-8-představení-vybraných-závěrečných-prací)
   - [14. lekce: Představení vybraných závěrečných prací](#14-lekce-představení-vybraných-závěrečných-prací)
+
+# Základní informace o kurzu
+Budeme se společně snažit se stát M-shaped architekty.
+
+<span style="font-size: 72px;">&mdash; vs. I vs. T vs. M</span>
+
+- **Pan pomlčka** - má přehled o všem, ale nic na hlubší úrovni
+- **I-shaped** - specialista na jednu oblast, ale neumí se dorozumět s ostatními
+- **T-shaped** - specialista na jednu oblast, ale má základní přehled o všem
+- **M-shaped** - velký přehled, hluboka znalost v několika oblastech, větší či menší v ostatních
+
+Pár bodů ke kurzu:
+- Tykejme si prosím, jinak je to zmatek a já si pak nepamatuji s kým jak to je nastavené.
+- Každý jsme v něčem silný, v něčem slabší. Sdílejte zkušenosti s ostatními, pomozte jim. Přijde kapitola, kdy zas oni pomohou vám.
+- Nepotřebujeme znát implementační detaily ani rozhodnout, který produkt nebo dodavatel je nejlepší. To nemusíme řešit.
+- Nezasekněte se na měsíc na jednom stromu, potřebujeme vidět les.
+- Doporučuji následující měřítko úspěchu: Srovnávejte se pouze s mladší verzí sebe sama a sledujte svoje zlepšení v každé oblasti. Výsledek je součet vašich zlepšení ve všech oblastech, tedy šířka i hloubka. Nechť není žádné téma, kde si řeknu "tohle ignoruju, to nědělám" - možná to není jedna z nohou mého M-ka, ale pořád chapu o čem to je.
+- V každé hodině mám pro vás několik ukázek a veškerý jejich kód najdete v tomto repozitáři a můžete si zkoušet sami. Já používám Azure a/nebo open source technologie, protože je znám nejlépe, ale vy použijte cokoli chcete.
+- Repozitář je živý - v průběhu ho budu dodělávat, opravovat apod. Vracejte se sem.
+- Pokud vám to vyjde, choďte na živý přenos. Není to masový kurz, máme prostor pro diskusi i otázky. Pokud ale nestihnete, žádný problém - záznam dávají organizátoři k dispozici obvykle tak do dvou dní.
+
+# Hodnocení, úkoly, závěrečná práce a termíny
+Jsou dva druhy certifikátu od Robot Dreams - za účast pro všechny a za úspěšné splnění pro ty, co se do toho zakousnou (tak snad taky pro všechny).
+
+Na to je potřeba získat alespoň **10 bodů ze 14 možných** (tj. 71 %). Body se dají získat následovně:
+- **1 bod** za každý domácí úkol v modulech 2-7 (celkem **6 bodů**)
+- **8 bodů** za závěrečnou práci
+
+**Zadání úkolu za modul:**
+Prakticky prozkoumejte některý z konceptů, který v modulu probereme. 
+- Zásadní tady je mít "ruce na klávesnici", něco si vyzkoušet a **sdílet** s ostatními.
+- Nejsme na implementačním školení. Je jedno jaký zvolíte cloud nebo jen lokální prostředí vlastního počítače, je jedno jaká technologie, jazyk nebo nástroj. Nepotřebujeme nic jakkoli produkčního - jde pouze o **demonstraci konceptu**.
+- Řeči nestačí a nejsou nutně potřeba. Jestli vám pro demonstraci stačí skript nebo kód s dobrými komentáři, tak je to v pořádku.
+- **Forma odevzdání:** Zpráva do příslušného kanálu modulu na Discordu (přiložte soubory, video, cokoli chcete). Že máte splněno poznáte tak, že vám dám šachovnicovou vlaječku.
+- **Termín:** Začátek poslední, tedy 14. lekce přesně. Ale prosím dělejte to dřív, ať se mohou všichni pokochat.
+
+**Zadání závěrečné práce:**
+Navrhněte a popište nějakou složitou aplikaci a dotkněte se všech oblastí, které jsme probrali.
+- Tady naopak ruce na klávesnici mít nebudeme. Cílem je přemýšlet, navrhovat, kreslit, vysvětlovat. Hodnotit se bude kvalita, komplexita a zda jsou všechny oblasti pokryty.
+- Pokud si chcete jako součást udělat i nějaký prototyp, tak samozřejmě můžete a rád se na to podívám, ale není to nutné pro získání plného počtu bodů.
+- Na práci doporučuji pracovat **průběžně** tak, jak probíráme jednotlivé oblasti. Nečekejte na závěr, bude pak málo času.
+- **Forma odevzdání:** Soukromá zpráva mě na Discordu, takže můžete pracovat i na věcech, které nechcete sdílet s ostatními. Nicméně poslední hodinu bych moc rád, abychom si vybrané práce představili - ale nenutím, na plný počet bodů to není potřeba.
+- **Termín:** Začátek poslední, tedy 14. lekce přesně. Ale kozultujte to se mnou klidně průběžně a odevzdávejte dřív, zejména, pokud jste ochotni se o to podělit na poslední hodině s ostatními, tak ať to spolu naladíme.
+
 
 
 # Modul 1: Základní koncepty
