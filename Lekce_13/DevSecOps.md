@@ -1,0 +1,2 @@
+# DevSecOps na příklad GitHub
+Bezpečnostní funkce GitHubu je možné zkoušet na veřejných repozitářích, což tento není. Proto jsem ukázku DevSecOps udělal tady: [https://github.com/tkubica12/gh-security-demo](https://github.com/tkubica12/gh-security-demo)
