@@ -22,6 +22,9 @@ config = {
     "API_SCOPES_CLIENT_CRED_FLOW": json.loads(os.getenv("API_SCOPES_CLIENT_CRED_FLOW")),
     "GRAPH_API_ENDPOINT": os.getenv("GRAPH_API_ENDPOINT"),
     "CUSTOM_API_ENDPOINT": os.getenv("CUSTOM_API_ENDPOINT"),
+    "CUSTOM_API_APIM_PASSTHROUGH_ENDPOINT": os.getenv("CUSTOM_API_APIM_PASSTHROUGH_ENDPOINT"),
+    "CUSTOM_API_APIM_REMOVEAUTH_ENDPOINT": os.getenv("CUSTOM_API_APIM_REMOVEAUTH_ENDPOINT"),
+    "CUSTOM_API_APIM_ONBEHALF_ENDPOINT": os.getenv("CUSTOM_API_APIM_ONBEHALF_ENDPOINT"),
     "PAGE_NAME": os.getenv("PAGE_NAME"),
     "FLASK_SECRET_KEY": os.getenv('FLASK_SECRET_KEY')
 }
@@ -35,8 +38,8 @@ Session(app)
 # generate http scheme when this sample is running on localhost,
 # and to generate https scheme when it is deployed behind reversed proxy.
 # See also https://flask.palletsprojects.com/en/2.2.x/deploying/proxy_fix/
-# from werkzeug.middleware.proxy_fix import ProxyFix
-# app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+from werkzeug.middleware.proxy_fix import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Useful in template for B2C
 app.jinja_env.globals.update(Auth=identity.web.Auth)
@@ -154,6 +157,65 @@ def custom_api_service():
             return render_template('display.html', result=api_result, token=decoded_token, page_name=config['PAGE_NAME'])
     else:
         return render_template('service_error.html', error="Cannot acquire token for service", page_name=config['PAGE_NAME'])
+    
+@app.route("/custom_api_apim_passthrough")
+def custom_api_apim_passthrough():
+    """Route to call Custom API via APIM using user token."""
+    token = auth.get_token_for_user(config['API_SCOPES'])
+    if "error" in token:
+        if token.get("suberror") == "consent_required":
+            return redirect(url_for("api_consent"))
+        else:
+            return redirect(url_for("login"))
         
+    response = requests.get(config['CUSTOM_API_APIM_PASSTHROUGH_ENDPOINT'], headers={'Authorization': 'Bearer ' + token['access_token']})
+    if response.status_code == 401:
+        # If the API returns a 401 status, render the unauthorized page
+        print(response.text)
+        return render_template('unauthorized.html', page_name=config['PAGE_NAME'])
+    else:
+        # Otherwise, proceed as normal
+        api_result = response.json()
+        decoded_token = decode_id_token(token['access_token'])
+        return render_template('display.html', result=api_result, token=decoded_token, page_name=config['PAGE_NAME'])
+
+    
+@app.route("/custom_api_apim_removeauth")
+def custom_api_apim_removeauth():
+    """Route to call Custom API on APIM using service token, APIM terminates and send plain to API."""
+    client_app = ConfidentialClientApplication(
+        client_id=config['BACKGROUND_CLIENT_ID'],
+        authority=config['AUTHORITY'],
+        client_credential=config['BACKGROUND_CLIENT_SECRET'],
+    )
+
+    token = client_app.acquire_token_for_client(scopes=config['API_SCOPES_CLIENT_CRED_FLOW'])
+
+    if "access_token" in token:
+        # Use the access token to call the Custom API
+        response = requests.get(config['CUSTOM_API_APIM_REMOVEAUTH_ENDPOINT'], headers={'Authorization': 'Bearer ' + token['access_token']})
+        if response.status_code == 401:
+            print(response.text)
+            return render_template('unauthorized.html', page_name=config['PAGE_NAME'])
+        else:
+            api_result = response.json()
+            decoded_token = decode_id_token(token['access_token'])
+            return render_template('display.html', result=api_result, token=decoded_token, page_name=config['PAGE_NAME'])
+    else:
+        return render_template('service_error.html', error="Cannot acquire token for service", page_name=config['PAGE_NAME'])
+    
+@app.route("/custom_api_apim_onbehalf")
+def custom_api_apim_onbehalf():
+    """Route to call Custom API on APIM without any authorization."""
+    response = requests.get(config['CUSTOM_API_APIM_ONBEHALF_ENDPOINT'])
+    if response.status_code == 401:
+        # If the API returns a 401 status, render the unauthorized page
+        print(response.text)
+        return render_template('unauthorized.html', page_name=config['PAGE_NAME'])
+    else:
+        # Otherwise, proceed as normal
+        api_result = response.json()
+        return render_template('display.html', result=api_result, token="", page_name=config['PAGE_NAME'])
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

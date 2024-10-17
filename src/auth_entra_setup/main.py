@@ -171,6 +171,51 @@ async def create_api_application():
     print(f"Created API Service Principal: {result.id}")
 
 
+async def create_apim_application():
+    """
+    Creates the background application with predefined settings, including required resource access to the API application, and updates the .env file with its credentials.
+    """
+    # Initialize DefaultAzureCredential
+    credentials = DefaultAzureCredential()
+
+    # Initialize GraphClient with the credential
+    graph_client = GraphServiceClient(credentials=credentials)
+
+    # Define the application request body
+    request_body = Application(
+        display_name="tokubica-auth-entra-apim",
+        sign_in_audience="AzureADMyOrg ",
+        password_credentials=[
+            PasswordCredential(
+                display_name="mypassword",
+            ),
+        ],
+        required_resource_access=[
+            RequiredResourceAccess(
+                resource_app_id=api_client_id,
+                resource_access=[
+                    ResourceAccess(
+                        id="74af35a7-6c8e-4051-9b15-86164a12bec5",
+                        type="Scope"
+                    )
+                ]
+            )
+        ]
+    )
+
+    result = await graph_client.applications.post(request_body)
+    update_env_field(env_file_path, "APIM_CLIENT_ID", result.app_id)
+    update_env_field(env_file_path, "APIM_CLIENT_SECRET",
+                     result.password_credentials[0].secret_text)
+    print(f"Created APIM application: {result.app_id}")
+
+    # Create a service principal for the background application
+    request_body = ServicePrincipal(
+        app_id = result.app_id,
+    )
+    result = await graph_client.service_principals.post(request_body)
+    print(f"Created APIM Service Principal: {result.id}")
+
 async def create_background_application():
     """
     Creates the background application with predefined settings, including required resource access to the API application, and updates the .env file with its credentials.
@@ -255,9 +300,11 @@ async def delete_applications_by_name(app_name):
 async def manage_applications():
     await delete_applications_by_name("tokubica-auth-entra-web")
     await delete_applications_by_name("tokubica-auth-entra-api")
+    await delete_applications_by_name("tokubica-auth-entra-apim")
     await delete_applications_by_name("tokubica-auth-entra-background")
     await create_main_application()
     await create_api_application()
+    await create_apim_application()
     await create_background_application()
 
 asyncio.run(manage_applications())

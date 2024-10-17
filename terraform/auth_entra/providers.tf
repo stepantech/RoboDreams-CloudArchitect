@@ -2,18 +2,22 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3"
+      version = "~>4"
     }
     random = {
       source  = "hashicorp/random"
       version = "~>3"
+    }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~>2"
     }
   }
   backend "azurerm" { # Change this to "local" for local backend
     resource_group_name  = "rg-base"
     storage_account_name = "tomaskubicatf"
     container_name       = "tfstate"
-    key                  = "cloud-arch-app-data.test.tfstate"
+    key                  = "cloud-arch-app-data.auth_entra.tfstate"
     use_azuread_auth     = true
     subscription_id      = "673af34d-6b28-41dc-bc7b-f507418045e6"
   }
@@ -32,6 +36,11 @@ provider "azurerm" {
       recover_soft_deleted_secrets               = true
       recover_soft_deleted_certificates          = true
       recover_soft_deleted_key_vaults            = true
+    }
+
+    api_management {
+      purge_soft_delete_on_destroy = true
+      recover_soft_deleted         = true
     }
   }
 }

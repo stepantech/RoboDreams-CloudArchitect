@@ -1,4 +1,5 @@
 # API Management
+Vyzkoušíme na příkladu books a versionme aplikace s využitím Azure Functions pro appku a nasadíme Terraform v adresáři `terraform/books`.
 
 ## Politiky, monetizace, bezpečnost
 V portálu služby si probereme jak vypadá fasáda, portál pro vývojáře a jak se dělají různé politiky a proč.

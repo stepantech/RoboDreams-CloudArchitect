@@ -1,9 +1,5 @@
 name: 06 TF - books
 on:
-  push:
-    paths:
-      - 'src/books_functions/**'
-      - 'terraform/books/**'
   workflow_dispatch: 
 
 permissions:

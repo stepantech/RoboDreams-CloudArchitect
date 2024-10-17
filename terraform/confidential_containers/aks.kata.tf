@@ -1,10 +1,16 @@
-resource "azurerm_kubernetes_cluster_node_pool" "kata" {
-  name                  = "kata"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.main.id
-  vm_size               = "Standard_D2ads_v5"
-  node_count            = 1
-  os_sku                = "AzureLinux"
-  os_disk_type          = "Ephemeral"
-  os_disk_size_gb       = 64
-  workload_runtime      = "KataMshvVmIsolation"
+resource "azapi_resource" "kata_node_pool" {
+  type      = "Microsoft.ContainerService/managedClusters/agentPools@2022-09-01"
+  name      = "kata"
+  parent_id = azurerm_kubernetes_cluster.main.id
+
+  body = jsonencode({
+    properties = {
+      vmSize            = "Standard_D2ads_v5"
+      count             = 1
+      osSKU             = "AzureLinux"
+      osDiskType        = "Ephemeral"
+      osDiskSizeGB      = 64
+      workloadRuntime   = "KataMshvVmIsolation"
+    }
+  })
 }
