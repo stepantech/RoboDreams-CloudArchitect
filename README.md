@@ -1,6 +1,7 @@
 # Architektura aplikací a zpracování dat v cloudu
 - [Architektura aplikací a zpracování dat v cloudu](#architektura-aplikací-a-zpracování-dat-v-cloudu)
 - [Základní informace o kurzu](#základní-informace-o-kurzu)
+- [— vs. I vs. T vs. M](#-vs-i-vs-t-vs-m)
 - [Hodnocení, úkoly, závěrečná práce a termíny](#hodnocení-úkoly-závěrečná-práce-a-termíny)
 - [Modul 1: Základní koncepty](#modul-1-základní-koncepty)
   - [1. lekce: Základní koncepty návrhu cloudových řešení](#1-lekce-základní-koncepty-návrhu-cloudových-řešení)
@@ -28,7 +29,7 @@
 # Základní informace o kurzu
 Budeme se společně snažit se stát M-shaped architekty.
 
-<span style="font-size: 72px;">&mdash; vs. I vs. T vs. M</span>
+# &mdash; vs. I vs. T vs. M</span>
 
 - **Pan pomlčka** - má přehled o všem, ale nic na hlubší úrovni
 - **I-shaped** - specialista na jednu oblast, ale neumí se dorozumět s ostatními
