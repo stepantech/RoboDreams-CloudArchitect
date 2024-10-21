@@ -18,7 +18,7 @@ Cloud-native použití VM je poměrně těžkopádné. Image jsou veliké, stroj
 
 Pro běh kontejnerů typicky použijete orchestrační nástroj jako je Kubernetes (probereme v příští lekci detailněji), ale čím dál častěji nad ním vystavenou více abstrahovanou (jednodušší na používání a spolehlivý provoz) platformu (Azure Container Apps, AWS Fargate, Google Cloud Run). Tyto platformy vám umožní nasadit kontejnerovou aplikaci bez nutnosti spravovat orchestraci. Na krajní části je pak serverless, kde už vůbec nemusíte řešit infrastrukturu a platíte jen za to, co skutečně spotřebujete.
 
-> **[Ukázka: Kontejnery vs. Serverless](webapp_green_blue.md)**
+> **[Ukázka: Kontejnery vs. Serverless](kontejnery_vs_serverless.md)**
 
 ## Autoškálování a jeho aspekty
 Autoškálování je schopnost systému reagovat na změny zátěže a přizpůsobit se jim. Může být **vertikální** (přidání výkonu na jednom stroji) nebo **horizontální** (přidání dalších strojů). Horizontální škálování je typické pro cloud-native aplikace a je založeno na tom, že aplikace je schopná běžet na více instancích a je schopná si mezi sebou rozdělit práci. U mnoha databázových systémů, které nabízí vysoké garance konzistence, ale horizontální škálování není k dispozici (cenou za něj je obvykle snížení garancí konzistence - o těchto aspektech a NoSQL světě se budeme v kurzu bavit později).

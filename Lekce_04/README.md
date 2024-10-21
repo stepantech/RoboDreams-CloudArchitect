@@ -23,7 +23,7 @@ Nejčastějším použitím je kombinace a distribuovanost. V živé lekci si pr
 
 Ještě zmiňme, že v některých případech distribuovaných řešení jsou v POP lokalitách i možnosti provozovat komplexní logiku a to dokonce až na úroveň vlastního kódu. 
 
-Na aplikační úrovni se v případě API (rozhranní pro komunikaci aplikačních komponent, například grafického uživatelského prostředí v mobilu či prohlížeči s různými backend službami) často používá API Management. Jde v zásadě o variaci na L7 balancing, o kterém jsme před chvílí mluvili, ale kromě směrování nebo bezpečnosti přidává další aplikačně specifické funkce. Může jít například o autentizaci a práci s tokeny, přízení přístupu, politiky pro užívání (například rate limit nebo monetizace), revize a verzování, převody formátů a manipulace s obsahem (např. konverze XML to JSON nebo SOAP do REST) a tal podobně.
+Na aplikační úrovni se v případě API (rozhranní pro komunikaci aplikačních komponent, například grafického uživatelského prostředí v mobilu či prohlížeči s různými backend službami) často používá API Management. Jde v zásadě o variaci na L7 balancing, o kterém jsme před chvílí mluvili, ale kromě směrování nebo bezpečnosti přidává další aplikačně specifické funkce. Může jít například o autentizaci a práci s tokeny, přízení přístupu, politiky pro užívání (například rate limit nebo monetizace), revize a verzování, převody formátů a manipulace s obsahem (např. konverze XML to JSON nebo SOAP do REST) a tak podobně.
 
 > **[Ukázka: API Management](apim.md)**
 
