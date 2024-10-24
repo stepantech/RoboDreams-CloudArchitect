@@ -1,5 +1,5 @@
-resource "azurerm_container_app" "or_request_trip" {
-  name                         = "ca-or-request-trip"
+resource "azurerm_container_app" "or_send_notification" {
+  name                         = "ca-or-send-notification"
   container_app_environment_id = azurerm_container_app_environment.main.id
   resource_group_name          = azurerm_resource_group.main.name
   revision_mode                = "Single"
@@ -7,19 +7,9 @@ resource "azurerm_container_app" "or_request_trip" {
   template {
     container {
       name   = "myapp"
-      image  = "ghcr.io/tkubica12/cloud-arch-app-data/or_request_trip:latest"
+      image  = "ghcr.io/tkubica12/cloud-arch-app-data/or_send_notification:latest"
       cpu    = 0.25
       memory = "0.5Gi"
-
-      env {
-        name  = "NOTIFICATION_BASE_URL"
-        value = "https://${azurerm_container_app.or_send_notification.ingress[0].fqdn}"
-      }
-
-      env {
-        name  = "ASSIGN_DRIVER_BASE_URL"
-        value = "https://${azurerm_container_app.or_assign_driver.ingress[0].fqdn}"
-      }
 
       liveness_probe {
         path = "/healthz"

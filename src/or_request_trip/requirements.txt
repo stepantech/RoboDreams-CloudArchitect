@@ -1,6 +1,4 @@
-dapr
-cloudevents
 Faker
 Flask
-dapr-ext-grpc
-dapr-ext-workflow
+python-dotenv
+requests

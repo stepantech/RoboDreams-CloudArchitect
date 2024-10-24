@@ -1,0 +1,9 @@
+POST https://ca-ch-request-trip.wonderfulcliff-9cd96933.swedencentral.azurecontainerapps.io
+Content-Type: application/json
+
+{
+    "userId": "testuser"
+}
+
+###
+GET https://ca-ch-request-trip.wonderfulcliff-9cd96933.swedencentral.azurecontainerapps.io

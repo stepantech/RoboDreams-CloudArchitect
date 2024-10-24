@@ -1,0 +1,19 @@
+@baseUrl = http://localhost:5000
+
+POST {{baseUrl}}/notifyTripCreated
+Content-Type: application/json
+
+{
+    "userId": "testuser",
+    "tripRequestId": "123"
+}
+
+###
+POST {{baseUrl}}/notifyDriverAssigned
+Content-Type: application/json
+
+{
+    "userId": "testuser",
+    "tripRequestId": "123",
+    "driverId": "456"
+}

@@ -1,0 +1,11 @@
+@baseUrl = http://localhost:5000
+
+POST {{baseUrl}}/assignDriver
+Content-Type: application/json
+
+{
+    "userId": "testuser",
+    "tripRequestId": "123",
+    "source": "something",
+    "destination": "something"
+}

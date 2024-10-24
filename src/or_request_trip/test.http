@@ -1,0 +1,12 @@
+@baseUrl = https://ca-or-request-trip.greendune-2af842b3.swedencentral.azurecontainerapps.io
+
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+    "userId": "testuser"
+}
+
+###
+GET {{baseUrl}}
+Content-Type: application/json

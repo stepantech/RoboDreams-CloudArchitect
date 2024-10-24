@@ -17,8 +17,6 @@ resource "azurerm_container_app" "ch_send_notification" {
       cpu    = 0.25
       memory = "0.5Gi"
 
-      # command = ["/bin/bash", "-c", "tail -f /dev/null"]
-
       env {
         name  = "PUBSUB_NAME"
         value = azurerm_container_app_environment_dapr_component.pubsub.name
