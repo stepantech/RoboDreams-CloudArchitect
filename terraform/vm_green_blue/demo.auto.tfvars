@@ -1,2 +1,2 @@
-green_count = 0
-blue_count = 2
+green_count = 2
+blue_count = 0

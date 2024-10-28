@@ -9,7 +9,7 @@ EOF
 
 variable "location" {
   type        = string
-  default     = "germanywestcentral"
+  default     = "swedencentral"
   description = <<EOF
 Azure region for resources.
 
@@ -35,7 +35,7 @@ EOF
 
 variable "green_version" {
   type        = string
-  default     = "1.0.0"
+  default     = "2.0.0"
   description = <<EOF
 Version of green virtual machines.
 EOF
@@ -43,7 +43,7 @@ EOF
 
 variable "blue_version" {
   type        = string
-  default     = "2.0.0"
+  default     = "1.0.0"
   description = <<EOF
 Version of blue virtual machines.
 EOF

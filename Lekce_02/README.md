@@ -8,7 +8,12 @@ Na tabuli si společně projdeme cestu z fyzických serverů k virtuálním stro
 
 Automatizovat instalaci fyzických serverů je náročné, ale možné (např. Metal-as-a-Service od Canonical nebo Pliant od IBM). V cloudu je ale bare metal (fyzické servery) služba, která je dost exotická a běžně se nepoužívá. Většinou minimem jsou virtualizované stroje. Ty lze s využitím cloudového API automatizovat velmi dobře. Ukážme si pár pokročilejších cloud-native principů práce s VM. Přestože jsou zmíněné techniky dobře funkční a cloudový poskytovatel právě tohle používá pro budování vyšších služeb nad tím (PaaS - například databázi jako služba), firemní klientela často provozuje VM "bare metal stylem", tedy stroj vytvoří a několik let ho oprašují (aktualizace apod.). Tento přístup je jistě v pořádku pro migraci tradičních aplikací nepřipravených na cloud, ale pro modernější věci bych doporučoval jít více cloud-native cestou (a možná nezůstat u VM viz dále).
 
-> **[Ukázka: Green-Blue nasazení VM](vm_green_blue.md)**
+> **[Ukázka: Green-Blue nasazení VM](vm_green_blue.md) 🎥 59:28**
+
+```
+# Příkaz pro testování loadbalancingu
+while true; do cutl <IL loadbalanceru>; sleep 0.2; done
+```
 
 Cloud-native použití VM je poměrně těžkopádné. Image jsou veliké, stroje pomalu startují a tak podobně. Řešení postavené na kontejnerech má mnoho zásadních výhod:
 - Škálovatelné a odlehčené (= rychlá reakce na změny zátěže, plynulé a časté upgrady)

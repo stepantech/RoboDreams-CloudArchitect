@@ -10,17 +10,17 @@ terraform {
     }
   }
   backend "azurerm" { # Change this to "local" for local backend
-    resource_group_name  = "rg-base"
-    storage_account_name = "tomaskubicatf"
+    resource_group_name  = "rg-base-dev-sc-001"
+    storage_account_name = "pscloudarchitecttf"
     container_name       = "tfstate"
     key                  = "cloud-arch-app-data.vm_green_blue.tfstate"
     use_azuread_auth     = true
-    subscription_id      = "673af34d-6b28-41dc-bc7b-f507418045e6"
+    subscription_id      = "7568475b-3f98-4c3f-8bbb-05e248ff70b4"
   }
 }
 
 provider "azurerm" {
-  subscription_id = "673af34d-6b28-41dc-bc7b-f507418045e6"
+  subscription_id = "7568475b-3f98-4c3f-8bbb-05e248ff70b4"
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
