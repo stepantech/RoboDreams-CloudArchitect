@@ -1,0 +1,4 @@
+{
+    "fileUris": ["https://raw.githubusercontent.com/stepantech/RoboDreams-CloudArchitect/refs/heads/main/src/virtual_machine_vmss/automate_nginx.sh"],
+    "commandToExecute": './automate_nginx.sh'
+  }
